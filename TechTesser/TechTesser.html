@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Editor on Image</title>
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+    .main-container {
+    	height:100vh;
+    	background-size:cover;
+    	display:flex;
+    	flex:row;
+    	justify-content: center;
+    	align-items:center;
+    }
+    #container {
+        position: relative;
+        background-image: url('backgroundimage.avif');
+        background-size: cover;
+        background-position: center;
+        text-align:center;
+        height: 80vh;
+        width:50%;
+        margin:20px;
+    }
+    .text {
+        position: absolute;
+        cursor: move;
+    }
+    .addTextbtn {
+    	padding-left:20px;
+    	padding-right:20px;
+    	padding-bottom:10px;
+    	padding-top:10px;
+    	color:#ffffff;
+    	background-color:blue;
+    	border-radius:10px;
+    	border-width:0px;
+    }
+    .labelTxt {
+    	font-family:"roboto";
+    	font-weight:bold;
+    	font-size:20px;
+    	margin:10px;
+    }
+    .styles-container {
+    	padding:40px;
+    }
+    
+     @media screen and (max-width: 768px) {
+        #container {
+        	  background-image:url('smallbg.avif');
+                 }
+        .main-container {
+		display: flex;
+		flex-direction: column; 
+		justify-content: center;
+		align-items: center;
+    }
+    }
+</style>
+</head>
+<body>
+<div class="main-container">
+<div id="container">
+</div>
+<div class="styles-container">
+<button class = "addTextbtn" onclick="addText()">Add Text</button>
+<br>
+</br>
+<label class="labelTxt" for="font-family">Font Family:</label>
+<select id="font-family" onchange="changeFontFamily()">
+    <option value="Arial">Arial</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Courier New">Courier New</option>
+    <!-- we can add more options  -->
+</select>
+<br>
+</br>
+<label class="labelTxt" for="font-size">Font Size:</label>
+<input type="number" id="font-size" min="10" max="100" value="16" onchange="changeFontSize()">
+<br>
+</br>
+<label class="labelTxt" for="font-color">Font Color:</label>
+<input type="color" id="font-color" value="#000000" onchange="changeFontColor()">
+<div/>
+<div/>
+<script>
+    let currentText = null;
+
+    function addText() {
+        const text = document.createElement('div');
+        text.contentEditable = true;
+        text.className = 'text';
+        text.style.top = '50px';
+        text.style.left = '50px';
+        text.style.fontSize = '16px';
+        text.style.color = '#000000';
+        text.style.fontFamily = 'Arial';
+        text.innerHTML = 'Type your text here';
+        text.addEventListener('mousedown', function(e) {
+            currentText = this;
+        });
+        document.getElementById('container').appendChild(text);
+    }
+
+    function changeFontFamily() {
+        if (currentText) {
+            currentText.style.fontFamily = document.getElementById('font-family').value;
+        }
+    }
+
+    function changeFontSize() {
+        if (currentText) {
+            currentText.style.fontSize = document.getElementById('font-size').value + 'px';
+        }
+    }
+
+    function changeFontColor() {
+        if (currentText) {
+            currentText.style.color = document.getElementById('font-color').value;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('container');
+        container.addEventListener('mousemove', function(e) {
+            if (currentText && e.buttons === 1) {
+                currentText.style.left = (e.pageX - container.offsetLeft) + 'px';
+                currentText.style.top = (e.pageY - container.offsetTop) + 'px';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+
